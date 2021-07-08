@@ -5,20 +5,23 @@ import by.epam.shapes.entity.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ShapeRepository {
+public class ShapeRepository implements Repository<Shape> {
 
-    private final List<Shape> shapeList = new ArrayList<>();
+    private final List<Shape> shapeList;
 
-    public ShapeRepository() { }
-
-    public static ShapeRepository getInstance() {
-        return InstanceHandler.INSTANCE;
+    public ShapeRepository() {
+        shapeList = new ArrayList<>();
     }
 
-    public List<Shape> getShapesList() {
+    public ShapeRepository(Shape... shapes) {
+        shapeList = List.of(shapes);
+    }
+
+    public List<Shape> findAll() {
         ArrayList<Shape> clonedShapesList = new ArrayList<>();
         for (Shape shape : shapeList) {
             try {
@@ -30,24 +33,23 @@ public class ShapeRepository {
         return clonedShapesList;
     }
 
-    private List<Shape> getShapesMatching(Predicate<Shape> predicate) {
-        return getShapesList()
+    private List<Shape> findShapesMatching(Predicate<Shape> predicate) {
+        return findAll()
                 .stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
     }
 
-    public List<Shape> findById(int id) {
-        return getShapesMatching(shape -> shape.getId() == (id));
+    public Optional<Shape> findById(int id) {
+        return findAll()
+                .stream()
+                .filter(shape -> shape.getId() == (id)).findFirst();
     }
 
-    public List<Shape> findByName(String name) {
-        return getShapesMatching(shape -> shape.getName().equalsIgnoreCase(name));
-    }
 
     public List<Shape> findShapesInFirstOctant() {
         List<Shape> shapesInFirstOctant = new ArrayList<>();
-        for (Shape shape : getShapesList()) {
+        for (Shape shape : findAll()) {
             for (Point point : shape.getPoints()) {
                 if (point.getX() > 0 &&
                     point.getY() > 0 &&
@@ -59,19 +61,15 @@ public class ShapeRepository {
         return shapesInFirstOctant;
     }
 
-    public void addShape(Shape shape) {
+    public void add(Shape shape) {
         shapeList.add(shape);
     }
 
-    public void removeShape(Shape shape) {
+    public void remove(Shape shape) {
         shapeList.remove(shape);
     }
 
     public void sort() {
 
-    }
-
-    private static class InstanceHandler {
-        public static final ShapeRepository INSTANCE = new ShapeRepository();
     }
  }

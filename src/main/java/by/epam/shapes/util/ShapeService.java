@@ -4,17 +4,19 @@ import by.epam.shapes.entity.Point;
 import by.epam.shapes.entity.RegularTetrahedron;
 import by.epam.shapes.entity.Shape;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 
 public class ShapeService {
 
-    private static Point[] findBasePoints(Point[] points) {
-        Point[] basePoints = new Point[(points.length) - 1];
-        for (int i = 0; i < basePoints.length; ++i) {
-            if (points[i] != findVertex(points)) {
-                basePoints[i] = points[i];
+    private static List<Point> findBasePoints(List<Point> points) {
+        List<Point> basePoints = new ArrayList<>(); // Point[(points.size()) - 1];
+        Point vertex = findVertex(points);
+        for (Point point : points) {
+            if(!point.equals(vertex)) {
+                basePoints.add(point);
             }
         }
         return basePoints;
@@ -36,9 +38,9 @@ public class ShapeService {
 
     public static double countArea(RegularTetrahedron tetrahedron) {
         Point vertex = findVertex(tetrahedron.getPoints());
-        Point p1 = findBasePoints(tetrahedron.getPoints())[0];
-        Point p2 = findBasePoints(tetrahedron.getPoints())[1];
-        Point p3 = findBasePoints(tetrahedron.getPoints())[2];
+        Point p1 = findBasePoints(tetrahedron.getPoints()).get(0);
+        Point p2 = findBasePoints(tetrahedron.getPoints()).get(1);
+        Point p3 = findBasePoints(tetrahedron.getPoints()).get(2);
 
         return findEquilateralTriangleArea(p1, p2, p3) +
                 findEquilateralTriangleArea(vertex, p1, p2) +
@@ -48,29 +50,27 @@ public class ShapeService {
 
     public static double countVolume(RegularTetrahedron tetrahedron) {
         Point vertex = findVertex(tetrahedron.getPoints());
-        Point p1 = findBasePoints(tetrahedron.getPoints())[0];
-        Point p2 = findBasePoints(tetrahedron.getPoints())[1];
-        Point p3 = findBasePoints(tetrahedron.getPoints())[2];
+        Point p1 = findBasePoints(tetrahedron.getPoints()).get(0);
+        Point p2 = findBasePoints(tetrahedron.getPoints()).get(1);
+        Point p3 = findBasePoints(tetrahedron.getPoints()).get(2);
 
         return Math.sqrt(Math.pow(findPointsDistance(vertex, p1), 2) -
                 Math.pow((findEquilateralTriangleHeight(p1, p2, p3)) / 2 , 2)) *
                 findEquilateralTriangleArea(p1, p2, p3) / 3;
     }
 
-    public static boolean isRegularTetrahedron(Point[] points) {
+    public static boolean isRegularTetrahedron(List<Point> points) {
         Point vertex = findVertex(points);
-        Point p1 = findBasePoints(points)[0];
-        Point p2 = findBasePoints(points)[1];
-        Point p3 = findBasePoints(points)[2];
+        Point p1 = findBasePoints(points).get(0);
+        Point p2 = findBasePoints(points).get(1);
+        Point p3 = findBasePoints(points).get(2);
         return (vertex != null &&
                 findPointsDistance(vertex, p1) == findPointsDistance(vertex, p2) &&
                 findPointsDistance(vertex, p2) == findPointsDistance(vertex, p3) &&
                 findPointsDistance(p1, p2) == findPointsDistance(p2, p3) &&
                 findPointsDistance(p2, p3) == findPointsDistance(p3, p1) &&
-                basePointsInTheSamePlane(points)
-                        );
+                basePointsInTheSamePlane(points));
     }
-
 
     public static String findVolumeRatiosDissectedByPlane(int[] plane) {
         return "a";
@@ -85,8 +85,8 @@ public class ShapeService {
             return false;
         }
         Function<Point, Integer> currentGetter = gettersChain.get(gettersChain.size() - 1);
-        for (int i = 0; i < tetrahedron.getPoints().length; ++i) {
-            Point currentPoint = tetrahedron.getPoints()[i];
+        for (int i = 0; i < tetrahedron.getPoints().size(); ++i) {
+            Point currentPoint = tetrahedron.getPoints().get(i);
             if (currentGetter.apply(currentPoint) !=0) {
                 gettersChain.remove(currentGetter);
                 return baseIsOnCoordinatePlane(tetrahedron, gettersChain);
@@ -95,28 +95,28 @@ public class ShapeService {
         return true;
     }
 
-    public static boolean basePointsInTheSamePlane(Point[] points) {
+    public static boolean basePointsInTheSamePlane(List<Point> points) {
         return findVertex(points, List.of(Point::getX, Point::getY, Point::getZ)) != null;
     }
 
-    private static Point findVertex(Point[] points) {
+    public static Point findVertex(List<Point> points) {
         return findVertex(points, List.of(Point::getX, Point::getY, Point::getZ));
     }
 
-    private static Point findVertex(Point[] points, List<Function<Point, Integer>> gettersChain) {
+    private static Point findVertex(List<Point> points, List<Function<Point, Integer>> gettersChain) {
         if(gettersChain.isEmpty()) {
             return null;
         }
         int equals = 0;
         Point vertex = null;
         Function<Point, Integer> currentGetter = gettersChain.get(gettersChain.size() - 1);
-        for (int i = 0; i < points.length; ++i) {
-            Point currentPoint = points[i];
-            Point nextPoint = points[i+1];
+        for (int i = 0; i < points.size(); ++i) {
+            Point currentPoint = points.get(i);
+            Point nextPoint = points.get(i+1);
             if (!currentGetter.apply(currentPoint).equals(currentGetter.apply(nextPoint))) {
                 vertex = currentPoint;
 
-                Point doubleNextPoint = points[i+2];
+                Point doubleNextPoint = points.get(i+2);
                 if(!currentGetter.apply(nextPoint).equals(currentGetter.apply(doubleNextPoint))) {
                     vertex = nextPoint;
                     if(!currentGetter.apply(currentPoint).equals(currentGetter.apply(doubleNextPoint))) {

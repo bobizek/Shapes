@@ -1,18 +1,23 @@
 package by.epam.shapes.entity;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 
-public class Shape {
+public class Shape implements Cloneable {
+
+    private static int globalId = 0;
+
     private int id;
-    private String name;
-    private Point[] points;
+    private List<Point> points;
 
     public Shape() {
+        points = new ArrayList<>();
+        this.id = ++globalId;
     }
 
-    public Shape(int id, String name, Point[] points) {
-        this.id = id;
-        this.name = name;
+    public Shape(List<Point> points) {
+        this();
         this.points = points;
     }
 
@@ -24,25 +29,17 @@ public class Shape {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Point[] getPoints() {
+    public List<Point> getPoints() {
         return points;
     }
 
-    public void setPoints(Point[] points) {
+    public void setPoints(List<Point> points) {
         this.points = points;
     }
 
     @Override
     public Shape clone() throws CloneNotSupportedException {
-        return new Shape(id, name, points);
+        return new Shape(points);
     }
 
     @Override
@@ -50,14 +47,19 @@ public class Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Shape shape = (Shape) o;
-        return (name.equals(shape.name)) && (id == shape.id) && (points == shape.points);
+        return (id == shape.id) && (points.equals(shape.points));
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(points);
-        return result;
+        return 31 * id + (points != null ? points.hashCode() : 0);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Shape.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("points=" + points)
+                .toString();
     }
 }

@@ -1,7 +1,7 @@
 package by.epam.shapes.reader;
 
-import by.epam.shapes.exception.PointReaderException;
+import by.epam.shapes.exception.ReaderException;
 
 public interface Reader {
-    public String readArray() throws PointReaderException;
+    String readPoints() throws ReaderException;
 }

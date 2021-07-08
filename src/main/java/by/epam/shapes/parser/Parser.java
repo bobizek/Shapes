@@ -1,4 +1,9 @@
 package by.epam.shapes.parser;
 
-public class Parser {
+import by.epam.shapes.entity.Point;
+
+import java.util.List;
+
+public interface Parser {
+    List<Point> parsePoints(String line);
 }
