@@ -20,27 +20,6 @@ import java.util.stream.Collectors;
 class ShapeCreatorTest {
     @Test
     void createShape() throws ReaderException {
-        TetrahedronSourceValidator validator = new TetrahedronSourceValidator();
-        PointsParser parser = new PointsParser();
-        PointReader reader = new PointReader("src//main//resources//textfiles//file.txt", validator);
-        ShapeCreator creator = new ShapeCreator(reader, parser);
-        List<Shape> shapes = creator.createShapes();
 
-        CalculationsWarehouse warehouse = CalculationsWarehouse.getInstance();
-
-        Repository<Shape> shapeRepository = RepositoryFactory.of(ShapeType.SHAPE);
-        shapeRepository.addAll(shapes);
-
-        Repository<RegularTetrahedron> tetrahedronRepository = RepositoryFactory.of(ShapeType.TETRAHEDRON);
-        tetrahedronRepository.addAll(shapes.stream()
-                .filter(shape -> BaseShapeService.of(ShapeType.TETRAHEDRON).isRegularTetrahedron(shape.getPoints()))
-                .map(shape -> (RegularTetrahedron)shape)
-                .collect(Collectors.toList()));
-
-        System.out.println(shapeRepository.findAll());
-        System.out.println(tetrahedronRepository.findAll());
-
-        System.out.println(warehouse.getAreas());
-        System.out.println(warehouse.getVolumes());
     }
 }
