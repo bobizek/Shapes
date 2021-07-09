@@ -1,9 +1,8 @@
 package by.epam.shapes.entity;
 
-import java.util.List;
 import java.util.StringJoiner;
 
-public class Point {
+public class Point implements Cloneable {
 
     private int x;
     private int y;
@@ -42,19 +41,20 @@ public class Point {
     }
 
     @Override
-    public boolean equals(Object o) { //// TODO: 8.07.21  
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Point point = (Point) o;
-
-        if (x != point.x) return false;
-        if (y != point.y) return false;
-        return z == point.z;
+    public Point clone() {
+        return new Point(getX(), getY(), getZ());
     }
 
     @Override
-    public int hashCode() { // // TODO: 8.07.21  
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return (x == point.x) && (y == point.y) && (z == point.z);
+    }
+
+    @Override
+    public int hashCode() {
         int result = x;
         result = 31 * result + y;
         result = 31 * result + z;
@@ -62,7 +62,7 @@ public class Point {
     }
 
     @Override
-    public String toString() { // // TODO: 8.07.21  
+    public String toString() {
         return new StringJoiner(", ", Point.class.getSimpleName() + "[", "]")
                 .add("x=" + x)
                 .add("y=" + y)

@@ -1,5 +1,8 @@
 package by.epam.shapes.entity;
 
+import by.epam.shapes.helper.ShapeType;
+import by.epam.shapes.util.BaseShapeService;
+
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -11,39 +14,40 @@ public class RegularTetrahedron extends Shape {
         super();
     }
 
-    public RegularTetrahedron(List<Point> points, Point topPoint) {
+    public RegularTetrahedron(List<Point> points) {
         super(points);
-        this.topPoint = topPoint;
+        setTopPoint(BaseShapeService.of(ShapeType.TETRAHEDRON).findVertex(points));
     }
 
     public Point getTopPoint() {
-        return topPoint;
+        return topPoint.clone();
     }
 
-    public void setTopPoint(Point topPoint) {
-        this.topPoint = topPoint;
+    private void setTopPoint(Point topPoint) {
+        this.topPoint = topPoint.clone();
     }
 
     @Override
-    public RegularTetrahedron clone() throws CloneNotSupportedException {
-        return new RegularTetrahedron(getPoints(), getTopPoint());
+    public void setPoints(List<Point> points) {
+        if(BaseShapeService.of(ShapeType.TETRAHEDRON).isRegularTetrahedron(points)) {
+            super.setPoints(points);
+            setTopPoint(BaseShapeService.of(ShapeType.TETRAHEDRON).findVertex(points));
+        }
+    }
+
+    @Override
+    public RegularTetrahedron clone() {
+        return new RegularTetrahedron(getPoints());
     }
 
     @Override
     public boolean equals(Object o) { // TODO: 8.07.21
-        super.equals(o);
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
         RegularTetrahedron that = (RegularTetrahedron) o;
-
-        return topPoint != null ? topPoint.equals(that.topPoint) : that.topPoint == null;
+        return super.equals(o) && topPoint != null ? topPoint.equals(that.topPoint) : that.topPoint == null;
     }
 
     @Override
     public int hashCode() { // TODO: 8.07.21
-        super.hashCode();
         int result = super.hashCode();
         result = 31 * result + (topPoint != null ? topPoint.hashCode() : 0);
         return result;
