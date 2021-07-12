@@ -2,7 +2,6 @@ package by.epam.shapes.dao.creator;
 
 import by.epam.shapes.dao.parser.impl.PointsParser;
 import by.epam.shapes.dao.reader.impl.PointReader;
-import by.epam.shapes.dao.repository.Repository;
 import by.epam.shapes.dao.validator.impl.TetrahedronSourceValidator;
 import by.epam.shapes.entity.Shape;
 import by.epam.shapes.helper.exception.ProjectException;
