@@ -73,13 +73,6 @@ public class ShapeRepository implements Repository<Shape> {
         return shapeList.remove(shape);
     }
 
-    public List<Shape> quickSortByX(List<Shape> shapeList) {
-        return (shapeList.size() == 1) ? shapeList : quickSort(shapeList, 0, shapeList.size() - 1,
-                (Shape s1, Shape s2) -> {
-                    return Integer.compare(s1.getId(), s2.getId());
-                });
-    }
-
     @Override
     public List<Shape> quickSortById() {
         return (shapeList.size() == 1) ? shapeList : quickSort(shapeList, 0, shapeList.size() - 1,
