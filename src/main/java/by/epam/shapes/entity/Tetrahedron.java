@@ -6,15 +6,15 @@ import by.epam.shapes.util.BaseShapeService;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class RegularTetrahedron extends Shape {
+public class Tetrahedron extends Shape {
 
     private Point topPoint;
 
-    public RegularTetrahedron() {
+    public Tetrahedron() {
         super();
     }
 
-    public RegularTetrahedron(List<Point> points) {
+    public Tetrahedron(List<Point> points) {
         super(points);
         setTopPoint(BaseShapeService.of(ShapeType.TETRAHEDRON).findVertex(points));
     }
@@ -36,13 +36,13 @@ public class RegularTetrahedron extends Shape {
     }
 
     @Override
-    public RegularTetrahedron clone() {
-        return new RegularTetrahedron(getPoints());
+    public Tetrahedron clone() {
+        return new Tetrahedron(getPoints());
     }
 
     @Override
     public boolean equals(Object o) { // TODO: 8.07.21
-        RegularTetrahedron that = (RegularTetrahedron) o;
+        Tetrahedron that = (Tetrahedron) o;
         return super.equals(o) && topPoint != null ? topPoint.equals(that.topPoint) : that.topPoint == null;
     }
 
@@ -55,7 +55,7 @@ public class RegularTetrahedron extends Shape {
 
     @Override
     public String toString() { // TODO: 8.07.21
-        return new StringJoiner(", ", RegularTetrahedron.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", Tetrahedron.class.getSimpleName() + "[", "]")
                 .add(super.toString())
                 .add("topPoint=" + topPoint)
                 .toString();

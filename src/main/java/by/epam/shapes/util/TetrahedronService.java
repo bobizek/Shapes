@@ -1,7 +1,7 @@
 package by.epam.shapes.util;
 
 import by.epam.shapes.entity.Point;
-import by.epam.shapes.entity.RegularTetrahedron;
+import by.epam.shapes.entity.Tetrahedron;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 
 
-public class TetrahedronService extends BaseShapeService<RegularTetrahedron> {
+public class TetrahedronService extends BaseShapeService<Tetrahedron> {
 
     private static TetrahedronService instance;
 
@@ -20,7 +20,7 @@ public class TetrahedronService extends BaseShapeService<RegularTetrahedron> {
     private TetrahedronService() { }
 
     @Override
-    public double countArea(RegularTetrahedron tetrahedron) {
+    public double countArea(Tetrahedron tetrahedron) {
         Point vertex = findVertex(tetrahedron.getPoints());
         Point p1 = findBasePoints(tetrahedron.getPoints()).get(0);
         Point p2 = findBasePoints(tetrahedron.getPoints()).get(1);
@@ -33,7 +33,7 @@ public class TetrahedronService extends BaseShapeService<RegularTetrahedron> {
     }
 
     @Override
-    public double countVolume(RegularTetrahedron tetrahedron) {
+    public double countVolume(Tetrahedron tetrahedron) {
         Point vertex = findVertex(tetrahedron.getPoints());
         Point p1 = findBasePoints(tetrahedron.getPoints()).get(0);
         Point p2 = findBasePoints(tetrahedron.getPoints()).get(1);
@@ -50,7 +50,7 @@ public class TetrahedronService extends BaseShapeService<RegularTetrahedron> {
     }
 
     @Override
-    public boolean baseIsOnCoordinatePlane(RegularTetrahedron tetrahedron) {
+    public boolean baseIsOnCoordinatePlane(Tetrahedron tetrahedron) {
         return baseIsOnCoordinatePlane(tetrahedron, List.of(Point::getX, Point::getY, Point::getZ));
     }
 
@@ -59,7 +59,7 @@ public class TetrahedronService extends BaseShapeService<RegularTetrahedron> {
         return findVertex(points, new ArrayList<>(Arrays.asList(Point::getX, Point::getY, Point::getZ)));
     }
 
-    private boolean baseIsOnCoordinatePlane(RegularTetrahedron tetrahedron, List<Function<Point, Integer>> gettersChain) {
+    private boolean baseIsOnCoordinatePlane(Tetrahedron tetrahedron, List<Function<Point, Integer>> gettersChain) {
         if(gettersChain.isEmpty()) {
             return false;
         }

@@ -1,6 +1,6 @@
 package by.epam.shapes.util.warehouse.impl;
 
-import by.epam.shapes.entity.RegularTetrahedron;
+import by.epam.shapes.entity.Tetrahedron;
 import by.epam.shapes.entity.Shape;
 import by.epam.shapes.helper.ShapeType;
 import by.epam.shapes.util.BaseShapeService;
@@ -38,7 +38,7 @@ public class CalculationsWarehouse implements Warehouse {
     }
 
     private void recalculateDataForShape(Shape shape) {
-        if(shape.getClass() == RegularTetrahedron.class) {
+        if(shape.getClass() == Tetrahedron.class) {
             ShapeService<Object> shapeService = BaseShapeService.of(ShapeType.TETRAHEDRON);
             int key = shape.getId();
             areas.remove(key);

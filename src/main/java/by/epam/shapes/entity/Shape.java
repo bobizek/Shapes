@@ -44,7 +44,6 @@ public class Shape implements Cloneable {
         for (Point point : points) {
             this.points.add(point.clone());
         }
-
         onShapeModifiedEvent.invoke(this);
     }
 
@@ -54,7 +53,6 @@ public class Shape implements Cloneable {
         for (Point point : points) {
             pointsCopy.add(point.clone());
         }
-
         return new Shape(pointsCopy);
     }
 

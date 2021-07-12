@@ -5,6 +5,7 @@ import by.epam.shapes.entity.Shape;
 import by.epam.shapes.dao.repository.Repository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -32,7 +33,7 @@ public class ShapeRepository implements Repository<Shape> {
         return clonedShapesList;
     }
 
-    private List<Shape> findShapesMatching(Predicate<Shape> predicate) {
+    private List<Shape> findShapesMatching(Predicate<Shape> predicate) { //never used
         return findAll()
                 .stream()
                 .filter(predicate)
@@ -60,19 +61,75 @@ public class ShapeRepository implements Repository<Shape> {
         return shapesInFirstOctant;
     }
 
-    public void add(Shape shape) {
-        shapeList.add(shape);
+    public boolean add(Shape shape) {
+        return shapeList.add(shape);
     }
 
     public void addAll(List<Shape> shapes) {
         shapes.forEach(this::add);
     }
 
-    public void remove(Shape shape) {
-        shapeList.remove(shape);
+    public boolean remove(Shape shape) {
+        return shapeList.remove(shape);
     }
 
-    public void sort() { // // TODO: 9.07.21  
+    public List<Shape> quickSortByX(List<Shape> shapeList) {
+        return (shapeList.size() == 1) ? shapeList : quickSort(shapeList, 0, shapeList.size() - 1,
+                (Shape s1, Shape s2) -> {
+                    return Integer.compare(s1.getId(), s2.getId());
+                });
+    }
 
+    @Override
+    public List<Shape> quickSortById() {
+        return (shapeList.size() == 1) ? shapeList : quickSort(shapeList, 0, shapeList.size() - 1,
+                Comparator.comparingInt(Shape::getId));
+    }
+
+    @Override
+    public List<Shape> quickSortByVertexX() {
+        return (shapeList.size() == 1) ? shapeList : quickSort(shapeList, 0, shapeList.size() - 1,
+                Comparator.comparingInt((Shape shape) -> shape.getPoints().get(0).getX()));
+    }
+
+    @Override
+    public List<Shape> quickSortByVertexY() {
+        return (shapeList.size() == 1) ? shapeList : quickSort(shapeList, 0, shapeList.size() - 1,
+                Comparator.comparingInt((Shape shape) -> shape.getPoints().get(0).getY()));
+    }
+
+    private List<Shape> quickSort(List<Shape> shapeList, int leftMarker, int rightMarker, Comparator<Shape> comparator) {
+
+        int left = leftMarker;
+        int right = rightMarker;
+        Shape pivot = shapeList.get((right + left) / 2);
+
+        while (left <= right) {
+            while (comparator.compare(pivot, shapeList.get(left)) > 0) {
+                ++left;
+            }
+
+            while (comparator.compare(pivot, shapeList.get(right)) < 0) {
+                --right;
+            }
+
+            if (left <= right) {
+                if (left < right) {
+                    Shape buf = shapeList.get(right);
+                    shapeList.set(right, shapeList.get(left));
+                    shapeList.set(left, buf);
+                }
+                ++left;
+                --right;
+            }
+        }
+        if (left < rightMarker) {
+            quickSort(shapeList, left, rightMarker, comparator);
+        }
+
+        if (leftMarker < right) {
+            quickSort(shapeList, leftMarker, right, comparator);
+        }
+        return shapeList;
     }
  }

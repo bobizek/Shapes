@@ -1,11 +1,10 @@
 package by.epam.shapes.dao.reader.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.junit.jupiter.api.Test;
 
 class PointReaderImplTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void readPoints() {
 
     }

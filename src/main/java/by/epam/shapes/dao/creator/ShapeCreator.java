@@ -1,9 +1,9 @@
 package by.epam.shapes.dao.creator;
 
 import by.epam.shapes.entity.Point;
-import by.epam.shapes.entity.RegularTetrahedron;
+import by.epam.shapes.entity.Tetrahedron;
 import by.epam.shapes.entity.Shape;
-import by.epam.shapes.helper.exception.ReaderException;
+import by.epam.shapes.helper.exception.ProjectException;
 import by.epam.shapes.helper.ShapeType;
 import by.epam.shapes.dao.parser.Parser;
 import by.epam.shapes.dao.reader.Reader;
@@ -22,18 +22,22 @@ public class ShapeCreator {
         this.parser = parser;
     }
 
-    public List<Shape> createShapes() throws ReaderException { // TODO: обернуть ридерэкзепшн в другой кастомный и бросить
+    public List<Shape> createShapes() { // TODO: fix exception + log
         List<Shape> shapes = new ArrayList<>();
-        List<List<Point>> parsedPoints = parser.parsePoints(reader.readPoints());
-        for (List<Point> points : parsedPoints) {
-            shapes.add(createShape(points));
+        try {
+            List<List<Point>> parsedPoints = parser.parsePoints(reader.readPoints());
+            for (List<Point> points : parsedPoints) {
+                shapes.add(createShape(points));
+            }
+        } catch (ProjectException e) {
+            e.printStackTrace();
         }
         return shapes;
     }
 
     public Shape createShape(List<Point> points) {
         return BaseShapeService.of(ShapeType.TETRAHEDRON).isRegularTetrahedron(points) ?
-                new RegularTetrahedron(points) :
+                new Tetrahedron(points) :
                 new Shape(points);
     }
 }

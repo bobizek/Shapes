@@ -2,8 +2,9 @@ package by.epam.shapes.util;
 
 import by.epam.shapes.entity.Point;
 import by.epam.shapes.entity.Shape;
-import by.epam.shapes.helper.exception.UnsupportedValueException;
 import by.epam.shapes.helper.ShapeType;
+import by.epam.shapes.helper.exception.ProjectException;
+import by.epam.shapes.helper.exception.UnmanagedProjectException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public abstract class BaseShapeService<T extends Shape> implements ShapeService<
 
     public static <T> ShapeService<T> of(ShapeType shapeType) {
         return switch (shapeType) {
-            case SHAPE -> throw new UnsupportedValueException("Shape service could not be implemented");
+            case SHAPE -> throw new UnmanagedProjectException("Shape service could not be implemented");
             case TETRAHEDRON -> (ShapeService<T>) TetrahedronService.getInstance();
         };
     }

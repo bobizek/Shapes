@@ -6,7 +6,11 @@ import java.util.Optional;
 public interface Repository<T> {
     List<T> findAll();
     Optional<T> findById(int id);
-    void add(T object);
+    boolean add(T object);
     void addAll(List<T> objects);
-    void remove(T object);
+    boolean remove(T object);
+    List<T> quickSortById();
+    List<T> quickSortByVertexX();
+    List<T> quickSortByVertexY();
+
 }

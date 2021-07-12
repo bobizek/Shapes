@@ -1,6 +1,6 @@
 package by.epam.shapes.dao.reader.impl;
 
-import by.epam.shapes.helper.exception.ReaderException;
+import by.epam.shapes.helper.exception.ProjectException;
 import by.epam.shapes.dao.reader.Reader;
 import by.epam.shapes.dao.validator.ShapeSourceValidator;
 
@@ -20,7 +20,7 @@ public class PointReader implements Reader {
         this.filepath = filepath;
     }
 
-    public List<String> readPoints() throws ReaderException {
+    public List<String> readPoints() throws ProjectException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
             List<String> result = new ArrayList<>();
             String line;
@@ -31,7 +31,7 @@ public class PointReader implements Reader {
             }
             return result;
         } catch (IOException e) {
-            throw new ReaderException("Cannot read array: ", e);
+            throw new ProjectException("Cannot read array: ", e);
         }
     }
 
